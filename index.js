@@ -41,7 +41,8 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/add", async (req, res) => {
-  
+  const enteredCountry = req.body.name;
+  const result = await db.query('SELECT country FROM country WHERE country_code = $1',[enteredCountry])
  })
 
 app.listen(port, () => {
