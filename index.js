@@ -10,7 +10,20 @@ const db = new pg.Client({
   port: 5432
 })
 
-db.connect()
+db.connect();
+
+let country_code = [];
+
+db.query("SELECT * FROM visited_countries", (err, res) => {
+  if (err) {
+    console.log("error quering visited countries", err.stack)
+  } else {
+    country_code = res.rows;
+    console.log(country_code)
+  }
+})
+
+
 
 const app = express();
 const port = 3000;
@@ -20,6 +33,10 @@ app.use(express.static("public"));
 
 app.get("/", async (req, res) => {
   //Write your code here.
+  res.render('index.ejs', {
+    total: country_code.length,
+    countries: country_code
+  })
 });
 
 app.listen(port, () => {
