@@ -1,30 +1,30 @@
+/** @format */
+
 import express from "express";
 import bodyParser from "body-parser";
-import pg from 'pg'
+import pg from "pg";
 
 const db = new pg.Client({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'world ',
-  password: '0607',
-  port: 5432
-})
+  user: "postgres",
+  host: "localhost",
+  database: "world ",
+  password: "0607",
+  port: 5432,
+});
 
 db.connect();
 
 let country_code = [];
 let countries = [];
 
-db.query("SELECT * FROM visited_countries", (err, res) => {
+db.query("SELECT country_code FROM visited_countries", (err, res) => {
   if (err) {
-    console.log("error quering visited countries", err.stack)
+    console.log("error quering visited countries", err.stack);
   } else {
     country_code = res.rows;
-    console.log(country_code)
+    console.log(country_code);
   }
-})
-
-
+});
 
 const app = express();
 const port = 3000;
@@ -34,10 +34,10 @@ app.use(express.static("public"));
 
 app.get("/", async (req, res) => {
   //Write your code here.
-  res.render('index.ejs', {
+  res.render("index.ejs", {
     total: country_code.length,
-    countries: country_code
-  })
+    countries: country_code.map((country) => country.country_code),
+  });
 });
 
 app.listen(port, () => {
