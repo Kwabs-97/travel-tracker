@@ -46,6 +46,8 @@ app.get("/add", async (req, res) => {
   if (result.rows !== 0) {
     const data = result.rows[0];
     const countryCode = data.country_code;
+    await db.query('INSERT INTO visited_country (country_code) VALUES($1)', [countryCode])
+    
   }
  })
 
