@@ -13,6 +13,7 @@ const db = new pg.Client({
 db.connect();
 
 let country_code = [];
+let countries = [];
 
 db.query("SELECT * FROM visited_countries", (err, res) => {
   if (err) {
