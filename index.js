@@ -37,8 +37,10 @@ app.post("/add", async (req, res) => {
 
   if (result.rows.length !== 0) {
     const data = result.rows[0];
+    const countryCode = data.country_code;
+    console.log(countryCode);
+    db.query("INSERT INTO visited_countries (country_code) VALUES ($1)", [countryCode])
   }
-
 });
 
 app.listen(port, () => {
