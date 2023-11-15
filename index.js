@@ -35,6 +35,10 @@ app.post("/add", async (req, res) => {
     enteredCountry,
   ]);
 
+  if (result.rows.length !== 0) {
+    const data = result.rows[0];
+  }
+
 });
 
 app.listen(port, () => {
