@@ -26,7 +26,15 @@ app.get("/", async (req, res) => {
   let countries = [];
   result.rows.forEach((country) => countries.push(country.country_code));
 
-  res.render('index.ejs', {countries, total: countries.length})
+  res.render("index.ejs", { countries, total: countries.length });
+});
+
+app.post("/add", async (req, res) => {
+  const enteredCountry = req.body.country;
+  const result = await db.query("SELECT country_code FROM countries WHERE country_name = $1", [
+    enteredCountry,
+  ]);
+
 });
 
 app.listen(port, () => {
