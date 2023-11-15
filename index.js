@@ -14,18 +14,6 @@ const db = new pg.Client({
 
 db.connect();
 
-let country_code = [];
-let countries = [];
-
-db.query("SELECT country_code FROM visited_countries", (err, res) => {
-  if (err) {
-    console.log("error quering visited countries", err.stack);
-  } else {
-    country_code = res.rows;
-    console.log(country_code);
-  }
-});
-
 const app = express();
 const port = 3000;
 
@@ -34,22 +22,12 @@ app.use(express.static("public"));
 
 app.get("/", async (req, res) => {
   //Write your code here.
-  res.render("index.ejs", {
-    total: country_code.length,
-    countries: country_code.map((country) => country.country_code),
-  });
-});
+  const result = await db.query("SELECT country_code FROM visited_countries");
+  let countries = [];
+  result.rows.forEach((country) => countries.push(country.country_code));
 
-app.get("/add", async (req, res) => {
-  const enteredCountry = req.body.name;
-  const result = await db.query('SELECT country_code FROM countries WHERE country_name = $1', [enteredCountry])
-  if (result.rows.length !== 0) {
-    const data = result.rows[0];
-    const countryCode = data.country_code;
-    await db.query('INSERT INTO visited_country (country_code) VALUES($1)', [countryCode])
-    
-  }
- })
+  res.render('index.ejs', {countries, total: countries.length})
+});
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
